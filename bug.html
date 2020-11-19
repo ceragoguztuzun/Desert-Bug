@@ -1,0 +1,141 @@
+<html>
+
+
+<script id="vertex-shader" type="x-shader/x-vertex">
+
+attribute  vec4 vPosition;
+
+uniform mat4 modelViewMatrix;
+uniform mat4 projectionMatrix;
+
+void main() 
+{
+    gl_Position = projectionMatrix * modelViewMatrix * vPosition;
+} 
+</script>
+
+<script id="fragment-shader" type="x-shader/x-fragment">
+
+precision mediump float;
+
+void main()
+{
+    gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+
+}
+</script>
+
+<script type="text/javascript" src="webgl-utils.js"></script>
+<script type="text/javascript" src="InitShaders.js"></script>
+<script type="text/javascript" src="MV.js"></script>
+<script type="text/javascript" src="bug.js"></script>
+
+<div id="torso_angle_slider">
+    torso angle -180 <input id="slide" type="range" min="-180" max="180" step="10" value="0" />
+    180
+</div><br />
+<div id="head1_angle_slider">
+    head2 angle -180 <input id="slide" type="range" min="-180" max="180" step="10" value="0" />
+    180
+</div><br />
+
+<div id="head2_angle_slider">
+    head1 angle -180 <input id="slide" type="range" min="-180" max="180" step="10" value="0" />
+    180
+</div><br />
+
+<div id="anthena1_angle_slider">
+    anthena 1 angle -180 <input id="slide" type="range" min="-180" max="180" step="10" value="0" />
+    180
+</div><br />
+
+<div id="anthena2_angle_slider">
+    anthena 2 angle -180 <input id="slide" type="range" min="-180" max="180" step="10" value="0" />
+    180
+</div><br />
+
+<div id="upperlegL_angle_slider">
+    left upper leg angle -180 <input id="slide" type="range" min="-180" max="180" step="10" value="0" />
+    180
+</div><br />
+<div id="upperlegL1_angle_slider">
+    left upper leg 1 angle -180 <input id="slide" type="range" min="-180" max="180" step="10" value="0" />
+    180
+</div><br />
+<div id="upperlegL2_angle_slider">
+    left upper leg 2 angle -180 <input id="slide" type="range" min="-180" max="180" step="10" value="0" />
+    180
+</div><br />
+<div id="upperlegR_angle_slider">
+    right upper leg angle -180 <input id="slide" type="range" min="-180" max="180" step="10" value="0" />
+    180
+</div><br />
+<div id="upperlegR1_angle_slider">
+    right upper leg 1 angle -180 <input id="slide" type="range" min="-180" max="180" step="10" value="0" />
+    180
+</div><br />
+<div id="upperlegR2_angle_slider">
+    right upper leg 2 angle -180 <input id="slide" type="range" min="-180" max="180" step="10" value="0" />
+    180
+</div><br />
+
+<div id="midlegL_angle_slider">
+    left mid leg angle -180 <input id="slide" type="range" min="-180" max="180" step="10" value="0" />
+    180
+</div><br />
+<div id="midlegL1_angle_slider">
+    left mid leg 1 angle -180 <input id="slide" type="range" min="-180" max="180" step="10" value="0" />
+    180
+</div><br />
+<div id="midlegL2_angle_slider">
+    left mid leg 2 angle -180 <input id="slide" type="range" min="-180" max="180" step="10" value="0" />
+    180
+</div><br />
+
+<div id="midlegR_angle_slider">
+    right mid leg angle -180 <input id="slide" type="range" min="-180" max="180" step="10" value="0" />
+    180
+</div><br />
+<div id="midlegR1_angle_slider">
+    right mid leg 1 angle -180 <input id="slide" type="range" min="-180" max="180" step="10" value="0" />
+    180
+</div><br />
+<div id="midlegR2_angle_slider">
+    right mid leg 2 angle -180 <input id="slide" type="range" min="-180" max="180" step="10" value="0" />
+    180
+</div><br />
+
+<div id="backlegL_angle_slider">
+    left back leg angle -180 <input id="slide" type="range" min="-180" max="180" step="10" value="0" />
+    180
+</div><br />
+<div id="backlegL1_angle_slider">
+    left back leg 1 angle -180 <input id="slide" type="range" min="-180" max="180" step="10" value="0" />
+    180
+</div><br />
+<div id="backlegL2_angle_slider">
+    left back leg 2 angle -180 <input id="slide" type="range" min="-180" max="180" step="10" value="0" />
+    180
+</div><br />
+
+<div id="backlegR_angle_slider">
+    right back leg angle -180 <input id="slide" type="range" min="-180" max="180" step="10" value="0" />
+    180
+</div><br />
+<div id="backlegR1_angle_slider">
+    right back leg 1 angle -180 <input id="slide" type="range" min="-180" max="180" step="10" value="0" />
+    180
+</div><br />
+<div id="backlegR2_angle_slider">
+    right back leg 2 angle -180 <input id="slide" type="range" min="-180" max="180" step="10" value="0" />
+    180
+</div><br />
+<div id="lightsaber_angle_slider">
+    lightsaber angle -180 <input id="slide" type="range" min="-180" max="180" step="10" value="0" />
+    180
+</div><br />
+
+<canvas id="gl-canvas" width="512" height="512">
+</canvas>
+
+</html>
