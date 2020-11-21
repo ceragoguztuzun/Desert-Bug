@@ -55,16 +55,16 @@ var backlegL2_id = 21;
 var lightsaber_id = 22;
 
 // widths & heights
-var torso_width = 6.0;
+var torso_width = 4.0;
 var torso_height = 1.0;
 
-var head_width = 2.0;
-var head_height = 2.0;
+var head_width = 1.0;
+var head_height = 1.0;
 
-var arm_width = 0.6;
-var arm_height = 3.0;
+var arm_width = 0.3;
+var arm_height = 2.0;
 
-var anthena_width = 0.3;
+var anthena_width = 0.2;
 var anthena_height = 3.5;
 
 var lightsaber_width = 1.0;
@@ -75,8 +75,8 @@ var numNodes = 23;
 var numAngles = 24;
 var angle = 0;
 
-// some angles may be changed but idk 
-var theta = [0, 0, 30, -30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+//angles for each node
+var theta = [180, 0, 30, -30, -60, 30, 0, 60, -30, 0, -60, 30, 0, 60, -30, 0, -60, 30, 0, 60, -30, 0, 0];
 
 var numVertices = 24;
 
@@ -123,14 +123,14 @@ function initNodes(id) {
 
         case torso_id:
             // configure m
-            m = rotate(theta[torso_id], 1, 0, 0); 
+            m = rotate(theta[torso_id], 0, 1, 0); 
             m = mult(m, rotate(theta[torso_id], 0, 0, 1))
             // form node
             figure[torso_id] = createNode(m, torso, null, head_id);
             break;
         case head_id:
             // configure m
-            m = translate(head_height*1.75, torso_height + 0.5*head_height, 0.0);
+            m = translate(head_height*1.75, torso_height + -head_height, 0.0);
             m = mult(m, rotate(theta[head_id], 0, 1, 0))
             m = mult(m, translate(0.0, -0.5 * head_height, 0.0));
             // form node
@@ -138,116 +138,150 @@ function initNodes(id) {
             break;
         case anthena1_id:
             // configure m
-            m = translate(0, 0.9 * torso_height, 0.0);
+            m = rotate(180, 1, 0, 0);
+            m = mult(m, translate(0, 0.9 * torso_height - 0.5*anthena_height, 0));
             m = mult(m, rotate(theta[anthena1_id], 1, 0, 0));
             // form node
             figure[anthena1_id] = createNode(m, anthena1, anthena2_id, null);
             break;
         case anthena2_id:
             // configure m
-            m = translate(0, 0.9 * torso_height, 0);
+            m = rotate(180, 1, 0, 0);
+            m = mult(m, translate(0, 0.9 * torso_height - 0.5*anthena_height, 0));
             m = mult(m, rotate(theta[anthena2_id], 1, 0, 0));
             // form node
             figure[anthena2_id] = createNode(m, anthena2, null, null);
             break;
         case upperlegR_id:
             // configure m
-            m = translate(torso_height*(0.75), arm_height-2, (torso_width*-0.3));
+            m = translate(torso_height*(0.75), arm_height-1, (torso_width*-0.3));
             m = mult(m, rotate(theta[upperlegR_id], 1, 0, 0));
             // form node
-            figure[upperlegR_id] = createNode(m, upperlegR, upperlegL_id, upperlegR1_id);
+            figure[upperlegR_id] = createNode(m, upperlegs, upperlegL_id, upperlegR1_id);
             break;
         case upperlegR1_id:
             // configure m
+            m = translate(torso_height*(0.05), arm_height-0.5, (torso_width*-0.05));
+            m = mult(m, rotate(theta[upperlegR1_id], 1, 0, 0));
             // form node
-            figure[upperlegR1_id] = createNode(m, upperlegR1, null, upperlegR2_id);
+            figure[upperlegR1_id] = createNode(m, midlegs, null, upperlegR2_id);
             break;
         case upperlegR2_id:
             // configure m
+            m = translate(torso_height*(0.025), arm_height-1.1, (torso_width*-0.025));
+            m = mult(m, rotate(theta[upperlegR2_id], 1, 0, 0));
             // form node
-            figure[upperlegR2_id] = createNode(m, upperlegR2, null, lightsaber_id);
+            figure[upperlegR2_id] = createNode(m, backlegs, null, lightsaber_id);
             break;
 
         case upperlegL_id:
             // configure m
-         //   m = translate(torso_height*(0.75), -arm_height+0.1, 0);
-          //  m = mult(m, rotate(theta[upperlegL_id], 1, 0, 0));
+            m = translate(torso_height*(0.75), arm_height-1, (torso_width*0.3));
+            m = mult(m, rotate(theta[upperlegL_id], 1, 0, 0));
             // form node
-            figure[upperlegL_id] = createNode(m, upperlegL, midlegR_id, upperlegL1_id);
+            figure[upperlegL_id] = createNode(m, upperlegs, midlegR_id, upperlegL1_id);
             break;
         case upperlegL1_id:
             // configure m
+            m = translate(torso_height*(0.05), arm_height-0.5, (torso_width*0.05));
+            m = mult(m, rotate(theta[upperlegL1_id], 1, 0, 0));
             // form node
-            figure[upperlegL1_id] = createNode(m, upperlegL1, null, upperlegL2_id);
+            figure[upperlegL1_id] = createNode(m, midlegs, null, upperlegL2_id);
             break;
         case upperlegL2_id:
             // configure m
+            m = translate(torso_height*(0.025), arm_height-1.1, (torso_width*-0.025));
+            m = mult(m, rotate(theta[upperlegL2_id], 1, 0, 0));
             // form node
-            figure[upperlegL2_id] = createNode(m, upperlegL2, null, null);
+            figure[upperlegL2_id] = createNode(m, backlegs, null, null);
             break;
 
         case midlegR_id:
             // configure m
+            m = translate(-0.5*torso_height*(0.75), arm_height-1, (torso_width*-0.3));
+            m = mult(m, rotate(theta[midlegR_id], 1, 0, 0));
             // form node
-            figure[midlegR_id] = createNode(m, midlegR, midlegL_id, midlegR1_id);
+            figure[midlegR_id] = createNode(m, upperlegs, midlegL_id, midlegR1_id);
             break;
         case midlegR1_id:
             // configure m
+            m = translate(-0.5*torso_height*(0.05), arm_height-0.5, (torso_width*-0.05));
+            m = mult(m, rotate(theta[midlegR1_id], 1, 0, 0));
             // form node
-            figure[midlegR1_id] = createNode(m, midlegR1, null, midlegR2_id);
+            figure[midlegR1_id] = createNode(m, midlegs, null, midlegR2_id);
             break;
         case midlegR2_id:
             // configure m
+            m = translate(-0.5*torso_height*(0.025), arm_height-1.1, (torso_width*-0.025));
+            m = mult(m, rotate(theta[midlegR2_id], 1, 0, 0));
             // form node
-            figure[midlegR2_id] = createNode(m, midlegR2, null, null);
+            figure[midlegR2_id] = createNode(m, backlegs, null, null);
             break;
 
         case midlegL_id:
             // configure m
+            m = translate(-0.5*torso_height*(0.75), arm_height-1, (torso_width*0.3));
+            m = mult(m, rotate(theta[midlegL_id], 1, 0, 0));
             // form node
-            figure[midlegL_id] = createNode(m, midlegL, backlegR_id, midlegL1_id);
+            figure[midlegL_id] = createNode(m, upperlegs, backlegR_id, midlegL1_id);
             break;
         case midlegL1_id:
             // configure m
+            m = translate(-0.5*torso_height*(0.05), arm_height-0.5, (torso_width*0.05));
+            m = mult(m, rotate(theta[midlegL1_id], 1, 0, 0));
             // form node
-            figure[midlegL1_id] = createNode(m, midlegL1, null, midlegL2_id);
+            figure[midlegL1_id] = createNode(m, midlegs, null, midlegL2_id);
             break;
         case midlegL2_id:
             // configure m
+            m = translate(-0.5*torso_height*(0.025), arm_height-1.1, (torso_width*-0.025));
+            m = mult(m, rotate(theta[midlegL2_id], 1, 0, 0));
             // form node
-            figure[midlegL2_id] = createNode(m, midlegL2, null, null);
+            figure[midlegL2_id] = createNode(m, backlegs, null, null);
             break;
 
         case backlegR_id:
             // configure m
+            m = translate(-2*torso_height*(0.75), arm_height-1, (torso_width*-0.3));
+            m = mult(m, rotate(theta[backlegR_id], 1, 0, 0));
             // form node
-            figure[backlegR_id] = createNode(m, backlegR, backlegL_id, backlegR1_id);
+            figure[backlegR_id] = createNode(m, upperlegs, backlegL_id, backlegR1_id);
             break;
         case backlegR1_id:
             // configure m
+            m = translate(-2*torso_height*(0.05), arm_height-0.5, (torso_width*-0.05));
+            m = mult(m, rotate(theta[backlegR1_id], 1, 0, 0));
             // form node
-            figure[backlegR1_id] = createNode(m, backlegR1, null, backlegR2_id);
+            figure[backlegR1_id] = createNode(m, midlegs, null, backlegR2_id);
             break;
         case backlegR2_id:
             // configure m
+            m = translate(-2*torso_height*(0.025), arm_height-1.1, (torso_width*-0.025));
+            m = mult(m, rotate(theta[backlegR2_id], 1, 0, 0));
             // form node
-            figure[backlegR2_id] = createNode(m, backlegR2, null, null);
+            figure[backlegR2_id] = createNode(m, backlegs, null, null);
             break;
 
         case backlegL_id:
             // configure m
+            m = translate(-2*torso_height*(0.75), arm_height-1, (torso_width*0.3));
+            m = mult(m, rotate(theta[backlegL_id], 1, 0, 0));
             // form node
-            figure[backlegL_id] = createNode(m, backlegL, null, backlegL1_id);
+            figure[backlegL_id] = createNode(m, upperlegs, null, backlegL1_id);
             break;
         case backlegL1_id:
             // configure m
+            m = translate(-2*torso_height*(0.05), arm_height-0.5, (torso_width*0.05));
+            m = mult(m, rotate(theta[backlegL1_id], 1, 0, 0));
             // form node
-            figure[backlegL1_id] = createNode(m, backlegL1, null, backlegL2_id);
+            figure[backlegL1_id] = createNode(m, midlegs, null, backlegL2_id);
             break;
         case backlegL2_id:
             // configure m
+            m = translate(-2*torso_height*(0.025), arm_height-1.1, (torso_width*-0.025));
+            m = mult(m, rotate(theta[backlegL2_id], 1, 0, 0));
             // form node
-            figure[backlegL2_id] = createNode(m, backlegL2, null, null);
+            figure[backlegL2_id] = createNode(m, backlegs, null, null);
             break;
 
         case lightsaber_id:
@@ -303,53 +337,26 @@ function anthena2() {
 }
 
 // draw UPPER LEG SECTION
-function upperlegR() {
+function upperlegs() {
     instanceMatrix = mult(modelViewMatrix, translate(0.0, 0.5 * arm_height, 0.0));
     instanceMatrix = mult(instanceMatrix, scale4(arm_width, arm_height, arm_width));
     gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(instanceMatrix));
     for (var i = 0; i < 6; i++) gl.drawArrays(gl.TRIANGLE_FAN, 4 * i, 4);
 }
-function upperlegR1() {
-}
-function upperlegR2() {
-}
-function upperlegL() {
-   // instanceMatrix = mult(modelViewMatrix, translate(0.0, 0.5 * arm_height, 0.0));
-   // instanceMatrix = mult(instanceMatrix, scale4(arm_width, arm_height, arm_width));
-   // gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(instanceMatrix));
-   // for (var i = 0; i < 6; i++) gl.drawArrays(gl.TRIANGLE_FAN, 4 * i, 4);
-}
-function upperlegL1() {
-}
-function upperlegL2() {
-}
-
 // draw MID LEG SECTION
-function midlegR() {
-}
-function midlegR1() {
-}
-function midlegR2() {
-}
-function midlegL() {
-}
-function midlegL1() {
-}
-function midlegL2() {
+function midlegs() {
+    instanceMatrix = mult(modelViewMatrix, translate(0.0, 0.5 * arm_height, 0.0));
+    instanceMatrix = mult(instanceMatrix, scale4(arm_width*0.5, arm_height*0.5, arm_width*0.5));
+    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(instanceMatrix));
+    for (var i = 0; i < 6; i++) gl.drawArrays(gl.TRIANGLE_FAN, 4 * i, 4);
 }
 
 // draw BACK LEG SECTION
-function backlegR() {
-}
-function backlegR1() {
-}
-function backlegR2() {
-}
-function backlegL() {
-}
-function backlegL1() {
-}
-function backlegL2() {
+function backlegs() {
+    instanceMatrix = mult(modelViewMatrix, translate(0.0, 0.5 * arm_height, 0.0));
+    instanceMatrix = mult(instanceMatrix, scale4(arm_width*0.25, arm_height*0.4, arm_width*0.25));
+    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(instanceMatrix));
+    for (var i = 0; i < 6; i++) gl.drawArrays(gl.TRIANGLE_FAN, 4 * i, 4);
 }
 
 // draw A BADASS LIGHTSABER
@@ -433,75 +440,83 @@ window.onload = function init() {
         theta[upperlegR_id ] = event.srcElement.value;
         initNodes(upperlegR_id );
     };
-    /*
     document.getElementById("upperlegL_angle_slider").onchange = function () {
         theta[upperlegL_id ] = event.srcElement.value;
         initNodes(upperlegL_id );
     };
-    document.getElementById("upperlegL1_angle_slider").onchange = function () {
-        theta[upperlegL1_id ] = event.srcElement.value;
-        initNodes(upperlegL1_id );
-    };
-    document.getElementById("upperlegL2_angle_slider").onchange = function () {
-        theta[upperlegL2_id ] = event.srcElement.value;
-        initNodes(upperlegL2_id );
-    };
-    document.getElementById("upperlegR1_angle_slider").onchange = function () {
-        theta[upperlegR1_id ] = event.srcElement.value;
-        initNodes(upperlegR1_id );
-    };
-    document.getElementById("upperlegR2_angle_slider").onchange = function () {
-        theta[upperlegR2_id ] = event.srcElement.value;
-        initNodes(upperlegR2_id );
-    };
+    
     document.getElementById("midlegL_angle_slider").onchange = function () {
         theta[midlegL_id ] = event.srcElement.value;
         initNodes(midlegL_id );
     };
-    document.getElementById("midlegL1_angle_slider").onchange = function () {
-        theta[midlegL1_id ] = event.srcElement.value;
-        initNodes(midlegL1_id );
-    };
-    document.getElementById("midlegL2_angle_slider").onchange = function () {
-        theta[midlegL2_id ] = event.srcElement.value;
-        initNodes(midlegL2_id );
-    };
+
     document.getElementById("midlegR_angle_slider").onchange = function () {
         theta[midlegR_id ] = event.srcElement.value;
         initNodes(midlegR_id );
+    };
+    
+    document.getElementById("backlegL_angle_slider").onchange = function () {
+        theta[backlegL_id ] = event.srcElement.value;
+        initNodes(backlegL_id );
+    };
+    
+    document.getElementById("backlegR_angle_slider").onchange = function () {
+        theta[backlegR_id ] = event.srcElement.value;
+        initNodes(backlegR_id );
+    };
+    
+    document.getElementById("upperlegL1_angle_slider").onchange = function () {
+        theta[upperlegL1_id ] = event.srcElement.value;
+        initNodes(upperlegL1_id );
+    };
+    
+    document.getElementById("upperlegR1_angle_slider").onchange = function () {
+        theta[upperlegR1_id ] = event.srcElement.value;
+        initNodes(upperlegR1_id );
+    };
+    
+    document.getElementById("midlegL1_angle_slider").onchange = function () {
+        theta[midlegL1_id ] = event.srcElement.value;
+        initNodes(midlegL1_id );
     };
     document.getElementById("midlegR1_angle_slider").onchange = function () {
         theta[midlegR1_id ] = event.srcElement.value;
         initNodes(midlegR1_id );
     };
-    document.getElementById("midlegR2_angle_slider").onchange = function () {
-        theta[midlegR2_id ] = event.srcElement.value;
-        initNodes(midlegR2_id );
-    };
-    document.getElementById("backlegL_angle_slider").onchange = function () {
-        theta[backlegL_id ] = event.srcElement.value;
-        initNodes(backlegL_id );
-    };
     document.getElementById("backlegL1_angle_slider").onchange = function () {
         theta[backlegL1_id ] = event.srcElement.value;
         initNodes(backlegL1_id );
-    };
-    document.getElementById("backlegL2_angle_slider").onchange = function () {
-        theta[backlegL2_id ] = event.srcElement.value;
-        initNodes(backlegL2_id );
-    };
-    document.getElementById("backlegR_angle_slider").onchange = function () {
-        theta[backlegR_id ] = event.srcElement.value;
-        initNodes(backlegR_id );
     };
     document.getElementById("backlegR1_angle_slider").onchange = function () {
         theta[backlegR1_id ] = event.srcElement.value;
         initNodes(backlegR1_id );
     };
+    document.getElementById("upperlegL2_angle_slider").onchange = function () {
+        theta[upperlegL2_id ] = event.srcElement.value;
+        initNodes(upperlegL2_id );
+    };
+    document.getElementById("upperlegR2_angle_slider").onchange = function () {
+        theta[upperlegR2_id ] = event.srcElement.value;
+        initNodes(upperlegR2_id );
+    };
+    document.getElementById("midlegL2_angle_slider").onchange = function () {
+        theta[midlegL2_id ] = event.srcElement.value;
+        initNodes(midlegL2_id );
+    };
+    document.getElementById("midlegR2_angle_slider").onchange = function () {
+        theta[midlegR2_id ] = event.srcElement.value;
+        initNodes(midlegR2_id );
+    };
+    document.getElementById("backlegL2_angle_slider").onchange = function () {
+        theta[backlegL2_id ] = event.srcElement.value;
+        initNodes(backlegL2_id );
+    };
     document.getElementById("backlegR2_angle_slider").onchange = function () {
         theta[backlegR2_id ] = event.srcElement.value;
         initNodes(backlegR2_id );
     };
+    
+    /*
     document.getElementById("lightsaber_angle_slider").onchange = function () {
         theta[lightsaber_id ] = event.srcElement.value;
         initNodes(lightsaber_id );
