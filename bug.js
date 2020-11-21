@@ -55,14 +55,28 @@ var backlegL2_id = 21;
 var lightsaber_id = 22;
 
 // widths & heights
-// TODO
+var torso_width = 6.0;
+var torso_height = 1.0;
+
+var head_width = 2.0;
+var head_height = 2.0;
+
+var arm_width = 0.6;
+var arm_height = 3.0;
+
+var anthena_width = 0.3;
+var anthena_height = 3.5;
+
+var lightsaber_width = 1.0;
+var lightsaber_height = 4.0;
+//
 
 var numNodes = 23;
 var numAngles = 24;
 var angle = 0;
 
 // some angles may be changed but idk 
-var theta = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+var theta = [0, 0, 30, -30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
 var numVertices = 24;
 
@@ -109,26 +123,37 @@ function initNodes(id) {
 
         case torso_id:
             // configure m
+            m = rotate(theta[torso_id], 1, 0, 0); 
+            m = mult(m, rotate(theta[torso_id], 0, 0, 1))
             // form node
             figure[torso_id] = createNode(m, torso, null, head_id);
             break;
         case head_id:
             // configure m
+            m = translate(head_height*1.75, torso_height + 0.5*head_height, 0.0);
+            m = mult(m, rotate(theta[head_id], 0, 1, 0))
+            m = mult(m, translate(0.0, -0.5 * head_height, 0.0));
             // form node
             figure[head_id] = createNode(m, head, upperlegR_id, anthena1_id);
             break;
         case anthena1_id:
             // configure m
+            m = translate(0, 0.9 * torso_height, 0.0);
+            m = mult(m, rotate(theta[anthena1_id], 1, 0, 0));
             // form node
             figure[anthena1_id] = createNode(m, anthena1, anthena2_id, null);
             break;
         case anthena2_id:
             // configure m
+            m = translate(0, 0.9 * torso_height, 0);
+            m = mult(m, rotate(theta[anthena2_id], 1, 0, 0));
             // form node
             figure[anthena2_id] = createNode(m, anthena2, null, null);
             break;
         case upperlegR_id:
             // configure m
+            m = translate(torso_height*(0.75), arm_height-2, (torso_width*-0.3));
+            m = mult(m, rotate(theta[upperlegR_id], 1, 0, 0));
             // form node
             figure[upperlegR_id] = createNode(m, upperlegR, upperlegL_id, upperlegR1_id);
             break;
@@ -145,6 +170,8 @@ function initNodes(id) {
 
         case upperlegL_id:
             // configure m
+         //   m = translate(torso_height*(0.75), -arm_height+0.1, 0);
+          //  m = mult(m, rotate(theta[upperlegL_id], 1, 0, 0));
             // form node
             figure[upperlegL_id] = createNode(m, upperlegL, midlegR_id, upperlegL1_id);
             break;
@@ -249,24 +276,48 @@ function traverse(id) {
 
 // draw TORSO
 function torso() {
+    instanceMatrix = mult(modelViewMatrix, translate(0.0, 0.5*torso_height, 0.0));
+    instanceMatrix = mult(instanceMatrix, scale4(torso_width, torso_height, torso_width));
+    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(instanceMatrix));
+    for (var i = 0; i < 6; i++) gl.drawArrays(gl.TRIANGLE_FAN, 4 * i, 4);
 }
 
 // draw HEAD SECTION
 function head() {
+    instanceMatrix = mult(modelViewMatrix, translate(0.0, 0.5*head_height, 0.0));
+    instanceMatrix = mult(instanceMatrix, scale4(head_width, head_height, head_width));
+    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(instanceMatrix));
+    for (var i = 0; i < 6; i++) gl.drawArrays(gl.TRIANGLE_FAN, 4 * i, 4);
 }
 function anthena1() {
+    instanceMatrix = mult(modelViewMatrix, translate(0.0, 0.5 * anthena_height, 0.0));
+    instanceMatrix = mult(instanceMatrix, scale4(anthena_width, anthena_height, anthena_width));
+    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(instanceMatrix));
+    for (var i = 0; i < 6; i++) gl.drawArrays(gl.TRIANGLE_FAN, 4 * i, 4);
 }
 function anthena2() {
+    instanceMatrix = mult(modelViewMatrix, translate(0.0, 0.5 * anthena_height, 0.0));
+    instanceMatrix = mult(instanceMatrix, scale4(anthena_width, anthena_height, anthena_width));
+    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(instanceMatrix));
+    for (var i = 0; i < 6; i++) gl.drawArrays(gl.TRIANGLE_FAN, 4 * i, 4);
 }
 
 // draw UPPER LEG SECTION
 function upperlegR() {
+    instanceMatrix = mult(modelViewMatrix, translate(0.0, 0.5 * arm_height, 0.0));
+    instanceMatrix = mult(instanceMatrix, scale4(arm_width, arm_height, arm_width));
+    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(instanceMatrix));
+    for (var i = 0; i < 6; i++) gl.drawArrays(gl.TRIANGLE_FAN, 4 * i, 4);
 }
 function upperlegR1() {
 }
 function upperlegR2() {
 }
 function upperlegL() {
+   // instanceMatrix = mult(modelViewMatrix, translate(0.0, 0.5 * arm_height, 0.0));
+   // instanceMatrix = mult(instanceMatrix, scale4(arm_width, arm_height, arm_width));
+   // gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(instanceMatrix));
+   // for (var i = 0; i < 6; i++) gl.drawArrays(gl.TRIANGLE_FAN, 4 * i, 4);
 }
 function upperlegL1() {
 }
@@ -378,7 +429,11 @@ window.onload = function init() {
         theta[anthena2_id ] = event.srcElement.value;
         initNodes(anthena2_id );
     };
-
+    document.getElementById("upperlegR_angle_slider").onchange = function () {
+        theta[upperlegR_id ] = event.srcElement.value;
+        initNodes(upperlegR_id );
+    };
+    /*
     document.getElementById("upperlegL_angle_slider").onchange = function () {
         theta[upperlegL_id ] = event.srcElement.value;
         initNodes(upperlegL_id );
@@ -390,10 +445,6 @@ window.onload = function init() {
     document.getElementById("upperlegL2_angle_slider").onchange = function () {
         theta[upperlegL2_id ] = event.srcElement.value;
         initNodes(upperlegL2_id );
-    };
-    document.getElementById("upperlegR_angle_slider").onchange = function () {
-        theta[upperlegR_id ] = event.srcElement.value;
-        initNodes(upperlegR_id );
     };
     document.getElementById("upperlegR1_angle_slider").onchange = function () {
         theta[upperlegR1_id ] = event.srcElement.value;
@@ -455,6 +506,7 @@ window.onload = function init() {
         theta[lightsaber_id ] = event.srcElement.value;
         initNodes(lightsaber_id );
     };
+    */
 
     for (i = 0; i < numNodes; i++) initNodes(i);
 
