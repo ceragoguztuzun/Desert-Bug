@@ -1,0 +1,21 @@
+#main_wrapper{
+    display: flex;
+}
+#parameter_wrapper{
+    width: 500px;
+}
+#canvas_wrapper{
+    flex-grow: 1;
+}
+
+#main_wrapper .selector_wrapper{
+    display: flex;
+    justify-content:space-between;
+    margin: 0 2rem;
+    height: 1rem;
+}
+
+#main_wrapper .input_wrapper{
+    display: flex;
+    align-items: center;
+}

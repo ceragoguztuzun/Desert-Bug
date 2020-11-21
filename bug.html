@@ -1,145 +1,409 @@
 <html>
+  <head>
+    <link rel="stylesheet" href="bug.css" />
+  </head>
+  <script id="vertex-shader" type="x-shader/x-vertex">
+    attribute  vec4 vPosition;
+    uniform mat4 modelViewMatrix;
+    uniform mat4 projectionMatrix;
 
+    void main()
+    {
+        gl_Position = projectionMatrix * modelViewMatrix * vPosition;
+    }
+  </script>
 
-<script id="vertex-shader" type="x-shader/x-vertex">
+  <script id="fragment-shader" type="x-shader/x-fragment">
+    precision mediump float;
+    void main()
+    {
+        gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
 
-attribute  vec4 vPosition;
+    }
+  </script>
 
-uniform mat4 modelViewMatrix;
-uniform mat4 projectionMatrix;
+  <script type="text/javascript" src="webgl-utils.js"></script>
+  <script type="text/javascript" src="InitShaders.js"></script>
+  <script type="text/javascript" src="MV.js"></script>
+  <script type="text/javascript" src="bug.js"></script>
 
-void main() 
-{
-    gl_Position = projectionMatrix * modelViewMatrix * vPosition;
-} 
-</script>
+  <div id="main_wrapper">
+    <div id="parameter_wrapper">
+      <div class="selector_wrapper" id="torso_angle_slider">
+        torso angle
+        <div class="input_wrapper">
+          -180
+          <input
+            id="slide"
+            type="range"
+            min="-180"
+            max="180"
+            step="10"
+            value="0"
+          />
+          180
+        </div>
+      </div>
+      <br />
+      <div class="selector_wrapper" id="head1_angle_slider">
+        head2 angle
+        <div class="input_wrapper">
+          -90
+          <input
+            id="slide"
+            type="range"
+            min="-90"
+            max="90"
+            step="5"
+            value="0"
+          />
+          90
+        </div>
+      </div>
+      <br />
+      <div class="selector_wrapper" id="anthena1_angle_slider">
+        anthena 1 angle
+        <div class="input_wrapper">
+          -15
+          <input
+            id="slide"
+            type="range"
+            min="-15"
+            max="15"
+            step="3"
+            value="0"
+          />
+          15
+        </div>
+      </div>
+      <br />
 
-<script id="fragment-shader" type="x-shader/x-fragment">
+      <div class="selector_wrapper" id="anthena2_angle_slider">
+        anthena 2 angle
+        <div class="input_wrapper">
+          -15
+          <input
+            id="slide"
+            type="range"
+            min="-15"
+            max="15"
+            step="3"
+            value="0"
+          />
+          15
+        </div>
+      </div>
+      <br />
+      <div class="selector_wrapper" id="upperlegR_angle_slider">
+        right upper leg angle
+        <div class="input_wrapper">
+          -60
+          <input
+            id="slide"
+            type="range"
+            min="-60"
+            max="60"
+            step="5"
+            value="0"
+          />
+          60
+        </div>
+      </div>
+      <br />
+      <div class="selector_wrapper" id="upperlegL_angle_slider">
+        left upper leg angle
+        <div class="input_wrapper">
+          -60
+          <input
+            id="slide"
+            type="range"
+            min="-60"
+            max="60"
+            step="5"
+            value="0"
+          />
+          60
+        </div>
+      </div>
+      <br />
 
-precision mediump float;
+      <div class="selector_wrapper" id="midlegR_angle_slider">
+        right mid leg angle
+        <div class="input_wrapper">
+          -60
+          <input
+            id="slide"
+            type="range"
+            min="-60"
+            max="60"
+            step="5"
+            value="0"
+          />
+          60
+        </div>
+      </div>
+      <br />
+      <div class="selector_wrapper" id="midlegL_angle_slider">
+        left mid leg angle
+        <div class="input_wrapper">
+          -60
+          <input
+            id="slide"
+            type="range"
+            min="-60"
+            max="60"
+            step="5"
+            value="0"
+          />
+          60
+        </div>
+      </div>
+      <br />
 
-void main()
-{
-    gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+      <div class="selector_wrapper" id="backlegR_angle_slider">
+        right back leg angle
+        <div class="input_wrapper">
+          -60
+          <input
+            id="slide"
+            type="range"
+            min="-60"
+            max="60"
+            step="5"
+            value="0"
+          />
+          60
+        </div>
+      </div>
+      <br />
 
-}
-</script>
+      <div class="selector_wrapper" id="backlegL_angle_slider">
+        left back leg angle
+        <div class="input_wrapper">
+          -60
+          <input
+            id="slide"
+            type="range"
+            min="-60"
+            max="60"
+            step="5"
+            value="0"
+          />
+          60
+        </div>
+      </div>
+      <br />
+      <div class="selector_wrapper" id="upperlegL1_angle_slider">
+        left upper leg 1 angle
+        <div class="input_wrapper">
+          -30
+          <input
+            id="slide"
+            type="range"
+            min="-30"
+            max="30"
+            step="5"
+            value="0"
+          />
+          30
+        </div>
+      </div>
+      <br />
 
-<script type="text/javascript" src="webgl-utils.js"></script>
-<script type="text/javascript" src="InitShaders.js"></script>
-<script type="text/javascript" src="MV.js"></script>
-<script type="text/javascript" src="bug.js"></script>
+      <div class="selector_wrapper" id="upperlegR1_angle_slider">
+        right upper leg 1 angle
+        <div class="input_wrapper">
+          -30
+          <input
+            id="slide"
+            type="range"
+            min="-30"
+            max="30"
+            step="5"
+            value="0"
+          />
+          30
+        </div>
+      </div>
+      <br />
 
-<div id="torso_angle_slider">
-    torso angle -180 <input id="slide" type="range" min="-180" max="180" step="10" value="0" />
-    180
-</div><br />
-<div id="head1_angle_slider">
-    head2 angle -90 <input id="slide" type="range" min="-90" max="90" step="5" value="0" />
-    90
-</div><br />
-<div id="anthena1_angle_slider">
-    anthena 1 angle -15 <input id="slide" type="range" min="-15" max="15" step="3" value="0" />
-    15
-</div><br />
+      <div class="selector_wrapper" id="midlegL1_angle_slider">
+        left mid leg 1 angle
+        <div class="input_wrapper">
+          -30
+          <input
+            id="slide"
+            type="range"
+            min="-30"
+            max="30"
+            step="5"
+            value="0"
+          />
+          30
+        </div>
+      </div>
+      <br />
 
-<div id="anthena2_angle_slider">
-    anthena 2 angle -15 <input id="slide" type="range" min="-15" max="15" step="3" value="0" />
-    15
-</div><br />
-<div id="upperlegR_angle_slider">
-    right upper leg angle -60 <input id="slide" type="range" min="-60" max="60" step="5" value="0" />
-    60
-</div><br />
-<div id="upperlegL_angle_slider">
-    left upper leg angle -60 <input id="slide" type="range" min="-60" max="60" step="5" value="0" />
-    60
-</div><br />
+      <div class="selector_wrapper" id="midlegR1_angle_slider">
+        right mid leg 1 angle
+        <div class="input_wrapper">
+          -30
+          <input
+            id="slide"
+            type="range"
+            min="-30"
+            max="30"
+            step="5"
+            value="0"
+          />
+          30
+        </div>
+      </div>
+      <br />
 
-<div id="midlegR_angle_slider">
-    right mid leg angle -60 <input id="slide" type="range" min="-60" max="60" step="5" value="0" />
-    60
-</div><br />
-<div id="midlegL_angle_slider">
-    left mid leg angle -60 <input id="slide" type="range" min="-60" max="60" step="5" value="0" />
-    60
-</div><br />
+      <div class="selector_wrapper" id="backlegL1_angle_slider">
+        left back leg 1 angle
+        <div class="input_wrapper">
+          -30
+          <input
+            id="slide"
+            type="range"
+            min="-30"
+            max="30"
+            step="5"
+            value="0"
+          />
+          30
+        </div>
+      </div>
+      <br />
 
-<div id="backlegR_angle_slider">
-    right back leg angle -60 <input id="slide" type="range" min="-60" max="60" step="5" value="0" />
-    60
-</div><br />
+      <div class="selector_wrapper" id="backlegR1_angle_slider">
+        right back leg 1 angle
+        <div class="input_wrapper">
+          -30
+          <input
+            id="slide"
+            type="range"
+            min="-30"
+            max="30"
+            step="5"
+            value="0"
+          />
+          30
+        </div>
+      </div>
+      <br />
 
-<div id="backlegL_angle_slider">
-    left back leg angle -60 <input id="slide" type="range" min="-60" max="60" step="5" value="0" />
-    60
-</div><br />
-<div id="upperlegL1_angle_slider">
-    left upper leg 1 angle -30 <input id="slide" type="range" min="-30" max="30" step="5" value="0" />
-    30
-</div><br />
+      <div class="selector_wrapper" id="upperlegL2_angle_slider">
+        left upper leg 2 angle
+        <div class="input_wrapper">
+          -15
+          <input
+            id="slide"
+            type="range"
+            min="-15"
+            max="15"
+            step="3"
+            value="0"
+          />
+          15
+        </div>
+      </div>
+      <br />
+      <div class="selector_wrapper" id="upperlegR2_angle_slider">
+        right upper leg 2 angle
+        <div class="input_wrapper">
+          -15
+          <input
+            id="slide"
+            type="range"
+            min="-15"
+            max="15"
+            step="3"
+            value="0"
+          />
+          15
+        </div>
+      </div>
+      <br />
 
-<div id="upperlegR1_angle_slider">
-    right upper leg 1 angle -30 <input id="slide" type="range" min="-30" max="30" step="5" value="0" />
-    30
-</div><br />
+      <div class="selector_wrapper" id="midlegL2_angle_slider">
+        left mid leg 2 angle
+        <div class="input_wrapper">
+          -15
+          <input
+            id="slide"
+            type="range"
+            min="-15"
+            max="15"
+            step="3"
+            value="0"
+          />
+          15
+        </div>
+      </div>
+      <br />
 
-<div id="midlegL1_angle_slider">
-    left mid leg 1 angle -30 <input id="slide" type="range" min="-30" max="30" step="5" value="0" />
-    30
-</div><br />
+      <div class="selector_wrapper" id="midlegR2_angle_slider">
+        right mid leg 2 angle
+        <div class="input_wrapper">
+          -15
+          <input
+            id="slide"
+            type="range"
+            min="-15"
+            max="15"
+            step="3"
+            value="0"
+          />
+          15
+        </div>
+      </div>
+      <br />
 
-<div id="midlegR1_angle_slider">
-    right mid leg 1 angle -30 <input id="slide" type="range" min="-30" max="30" step="5" value="0" />
-    30
-</div><br />
+      <div class="selector_wrapper" id="backlegL2_angle_slider">
+        left back leg 2 angle
+        <div class="input_wrapper">
+          -15
+          <input
+            id="slide"
+            type="range"
+            min="-15"
+            max="15"
+            step="3"
+            value="0"
+          />
+          15
+        </div>
+      </div>
+      <br />
 
-<div id="backlegL1_angle_slider">
-    left back leg 1 angle -30 <input id="slide" type="range" min="-30" max="30" step="5" value="0" />
-    30
-</div><br />
-
-<div id="backlegR1_angle_slider">
-    right back leg 1 angle -30 <input id="slide" type="range" min="-30" max="30" step="5" value="0" />
-    30
-</div><br />
-
-<div id="upperlegL2_angle_slider">
-    left upper leg 2 angle -15 <input id="slide" type="range" min="-15" max="15" step="3" value="0" />
-    15
-</div><br />
-<div id="upperlegR2_angle_slider">
-    right upper leg 2 angle -15 <input id="slide" type="range" min="-15" max="15" step="3" value="0" />
-    15
-</div><br />
-
-<div id="midlegL2_angle_slider">
-    left mid leg 2 angle -15 <input id="slide" type="range" min="-15" max="15" step="3" value="0" />
-    15
-</div><br />
-
-<div id="midlegR2_angle_slider">
-    right mid leg 2 angle -15 <input id="slide" type="range" min="-15" max="15" step="3" value="0" />
-    15
-</div><br />
-
-<div id="backlegL2_angle_slider">
-    left back leg 2 angle -15 <input id="slide" type="range" min="-15" max="15" step="3" value="0" />
-    15
-</div><br />
-
-<div id="backlegR2_angle_slider">
-    right back leg 2 angle -15 <input id="slide" type="range" min="-15" max="15" step="3" value="0" />
-    15
-</div><br />
-<!--
+      <div class="selector_wrapper" id="backlegR2_angle_slider">
+        right back leg 2 angle
+        <div class="input_wrapper">
+          -15
+          <input
+            id="slide"
+            type="range"
+            min="-15"
+            max="15"
+            step="3"
+            value="0"
+          />
+          15
+        </div>
+      </div>
+      <br />
+    </div>
+    <!--
 <div id="lightsaber_angle_slider">
     lightsaber angle -180 <input id="slide" type="range" min="-180" max="180" step="10" value="0" />
     180
 </div><br />
 -->
-
-<canvas id="gl-canvas" width="512" height="512">
-</canvas>
-
+    <div id="canvas_wrapper">
+      <canvas id="gl-canvas" width="512" height="512"> </canvas>
+    </div>
+  </div>
 </html>
