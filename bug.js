@@ -76,7 +76,7 @@ var numAngles = 24;
 var angle = 0;
 
 //angles for each node
-var theta = [180, 0, 30, -30, -60, 30, 0, 60, -30, 0, -60, 30, 0, 60, -30, 0, -60, 30, 0, 60, -30, 0, 0];
+var theta = [180, 0, 30, -30, -60, 30, 15, 60, -30, -15, -60, 30, 15, 60, -30, -15, -60, 30, 15, 60, -30, -15, 0];
 
 var numVertices = 24;
 
@@ -161,17 +161,17 @@ function initNodes(id) {
             break;
         case upperlegR1_id:
             // configure m
-            m = translate(torso_height*(0.05), arm_height-0.5, (torso_width*-0.05));
+            m = translate(torso_height*(0.05), arm_height-0.2, (torso_width*-0.03));
             m = mult(m, rotate(theta[upperlegR1_id], 1, 0, 0));
             // form node
-            figure[upperlegR1_id] = createNode(m, midlegs, null, upperlegR2_id);
+            figure[upperlegR1_id] = createNode(m, legs1, null, upperlegR2_id);
             break;
         case upperlegR2_id:
             // configure m
             m = translate(torso_height*(0.025), arm_height-1.1, (torso_width*-0.025));
             m = mult(m, rotate(theta[upperlegR2_id], 1, 0, 0));
             // form node
-            figure[upperlegR2_id] = createNode(m, backlegs, null, lightsaber_id);
+            figure[upperlegR2_id] = createNode(m, legs2, null, lightsaber_id);
             break;
 
         case upperlegL_id:
@@ -183,17 +183,17 @@ function initNodes(id) {
             break;
         case upperlegL1_id:
             // configure m
-            m = translate(torso_height*(0.05), arm_height-0.5, (torso_width*0.05));
+            m = translate(torso_height*(0.05), arm_height-0.2, (torso_width*0.03));
             m = mult(m, rotate(theta[upperlegL1_id], 1, 0, 0));
             // form node
-            figure[upperlegL1_id] = createNode(m, midlegs, null, upperlegL2_id);
+            figure[upperlegL1_id] = createNode(m, legs1, null, upperlegL2_id);
             break;
         case upperlegL2_id:
             // configure m
             m = translate(torso_height*(0.025), arm_height-1.1, (torso_width*-0.025));
             m = mult(m, rotate(theta[upperlegL2_id], 1, 0, 0));
             // form node
-            figure[upperlegL2_id] = createNode(m, backlegs, null, null);
+            figure[upperlegL2_id] = createNode(m, legs2, null, null);
             break;
 
         case midlegR_id:
@@ -205,17 +205,17 @@ function initNodes(id) {
             break;
         case midlegR1_id:
             // configure m
-            m = translate(-0.5*torso_height*(0.05), arm_height-0.5, (torso_width*-0.05));
+            m = translate(-0.5*torso_height*(0.05), arm_height-0.2, (torso_width*-0.03));
             m = mult(m, rotate(theta[midlegR1_id], 1, 0, 0));
             // form node
-            figure[midlegR1_id] = createNode(m, midlegs, null, midlegR2_id);
+            figure[midlegR1_id] = createNode(m, legs1, null, midlegR2_id);
             break;
         case midlegR2_id:
             // configure m
             m = translate(-0.5*torso_height*(0.025), arm_height-1.1, (torso_width*-0.025));
             m = mult(m, rotate(theta[midlegR2_id], 1, 0, 0));
             // form node
-            figure[midlegR2_id] = createNode(m, backlegs, null, null);
+            figure[midlegR2_id] = createNode(m, legs2, null, null);
             break;
 
         case midlegL_id:
@@ -227,17 +227,17 @@ function initNodes(id) {
             break;
         case midlegL1_id:
             // configure m
-            m = translate(-0.5*torso_height*(0.05), arm_height-0.5, (torso_width*0.05));
+            m = translate(-0.5*torso_height*(0.05), arm_height-0.2, (torso_width*0.03));
             m = mult(m, rotate(theta[midlegL1_id], 1, 0, 0));
             // form node
-            figure[midlegL1_id] = createNode(m, midlegs, null, midlegL2_id);
+            figure[midlegL1_id] = createNode(m, legs1, null, midlegL2_id);
             break;
         case midlegL2_id:
             // configure m
             m = translate(-0.5*torso_height*(0.025), arm_height-1.1, (torso_width*-0.025));
             m = mult(m, rotate(theta[midlegL2_id], 1, 0, 0));
             // form node
-            figure[midlegL2_id] = createNode(m, backlegs, null, null);
+            figure[midlegL2_id] = createNode(m, legs2, null, null);
             break;
 
         case backlegR_id:
@@ -249,17 +249,17 @@ function initNodes(id) {
             break;
         case backlegR1_id:
             // configure m
-            m = translate(-2*torso_height*(0.05), arm_height-0.5, (torso_width*-0.05));
+            m = translate(-2*torso_height*(0.05), arm_height-0.2, (torso_width*-0.03));
             m = mult(m, rotate(theta[backlegR1_id], 1, 0, 0));
             // form node
-            figure[backlegR1_id] = createNode(m, midlegs, null, backlegR2_id);
+            figure[backlegR1_id] = createNode(m, legs1, null, backlegR2_id);
             break;
         case backlegR2_id:
             // configure m
             m = translate(-2*torso_height*(0.025), arm_height-1.1, (torso_width*-0.025));
             m = mult(m, rotate(theta[backlegR2_id], 1, 0, 0));
             // form node
-            figure[backlegR2_id] = createNode(m, backlegs, null, null);
+            figure[backlegR2_id] = createNode(m, legs2, null, null);
             break;
 
         case backlegL_id:
@@ -271,17 +271,17 @@ function initNodes(id) {
             break;
         case backlegL1_id:
             // configure m
-            m = translate(-2*torso_height*(0.05), arm_height-0.5, (torso_width*0.05));
+            m = translate(-2*torso_height*(0.05), arm_height-0.2, (torso_width*0.03));
             m = mult(m, rotate(theta[backlegL1_id], 1, 0, 0));
             // form node
-            figure[backlegL1_id] = createNode(m, midlegs, null, backlegL2_id);
+            figure[backlegL1_id] = createNode(m, legs1, null, backlegL2_id);
             break;
         case backlegL2_id:
             // configure m
             m = translate(-2*torso_height*(0.025), arm_height-1.1, (torso_width*-0.025));
             m = mult(m, rotate(theta[backlegL2_id], 1, 0, 0));
             // form node
-            figure[backlegL2_id] = createNode(m, backlegs, null, null);
+            figure[backlegL2_id] = createNode(m, legs2, null, null);
             break;
 
         case lightsaber_id:
@@ -343,18 +343,17 @@ function upperlegs() {
     gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(instanceMatrix));
     for (var i = 0; i < 6; i++) gl.drawArrays(gl.TRIANGLE_FAN, 4 * i, 4);
 }
-// draw MID LEG SECTION
-function midlegs() {
-    instanceMatrix = mult(modelViewMatrix, translate(0.0, 0.5 * arm_height, 0.0));
-    instanceMatrix = mult(instanceMatrix, scale4(arm_width*0.5, arm_height*0.5, arm_width*0.5));
+
+function legs1() {
+    instanceMatrix = mult(modelViewMatrix, translate(0.0, 0.25* arm_height, 0.0));
+    instanceMatrix = mult(instanceMatrix, scale4(arm_width*0.5, arm_height*0.6, arm_width*0.5));
     gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(instanceMatrix));
     for (var i = 0; i < 6; i++) gl.drawArrays(gl.TRIANGLE_FAN, 4 * i, 4);
 }
 
-// draw BACK LEG SECTION
-function backlegs() {
-    instanceMatrix = mult(modelViewMatrix, translate(0.0, 0.5 * arm_height, 0.0));
-    instanceMatrix = mult(instanceMatrix, scale4(arm_width*0.25, arm_height*0.4, arm_width*0.25));
+function legs2() {
+    instanceMatrix = mult(modelViewMatrix, translate(0.0, 0.25* arm_height, 0.0));
+    instanceMatrix = mult(instanceMatrix, scale4(arm_width*0.2, arm_height*0.4, arm_width*0.2));
     gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(instanceMatrix));
     for (var i = 0; i < 6; i++) gl.drawArrays(gl.TRIANGLE_FAN, 4 * i, 4);
 }
