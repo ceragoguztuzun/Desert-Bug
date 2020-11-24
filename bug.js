@@ -21,6 +21,18 @@ var vertices = [
     vec4(0.5, -0.5, -0.5, 1.0)
 ];
 
+var lightPosition = vec4(1.0, 1.0, 1.0, 0.0 );
+var lightAmbient = vec4(0.2, 0.2, 0.2, 1.0 );
+var lightDiffuse = vec4( 1.0, 1.0, 1.0, 1.0 );
+var lightSpecular = vec4( 1.0, 1.0, 1.0, 1.0 );
+
+var materialAmbient = vec4( 1.0, 0.0, 1.0, 1.0 );
+var materialDiffuse = vec4( 1.0, 0.8, 0.0, 1.0);
+var materialSpecular = vec4( 1.0, 0.8, 0.0, 1.0 );
+var materialShininess = 100.0;
+
+var ambientColor, diffuseColor, specularColor;
+
 // node ids
 var torso_id = 0;
 
@@ -90,6 +102,7 @@ var vBuffer;
 var modelViewLoc;
 
 var pointsArray = [];
+var normalsArray = [];
 
 //-------------------------------------------
 
@@ -364,10 +377,24 @@ function lightsaber() {
 }
 
 function quad(a, b, c, d) {
-    pointsArray.push(vertices[a]);
-    pointsArray.push(vertices[b]);
-    pointsArray.push(vertices[c]);
-    pointsArray.push(vertices[d]);
+    var t1 = subtract(vertices[b], vertices[a]);
+    var t2 = subtract(vertices[c], vertices[b]);
+    var normal = cross(t1, t2);
+    var normal = vec3(normal);
+
+
+    pointsArray.push(vertices[a]); 
+    normalsArray.push(normal); 
+    pointsArray.push(vertices[b]); 
+    normalsArray.push(normal); 
+    pointsArray.push(vertices[c]); 
+    normalsArray.push(normal);   
+    pointsArray.push(vertices[a]);  
+    normalsArray.push(normal); 
+    pointsArray.push(vertices[c]); 
+    normalsArray.push(normal); 
+    pointsArray.push(vertices[d]); 
+    normalsArray.push(normal);    
 }
 
 
@@ -388,133 +415,40 @@ window.onload = function init() {
 
     gl.viewport(0, 0, canvas.width, canvas.height);
     gl.clearColor(0.8, 0.8, 0.8, 1.0);
-
+    gl.enable(gl.DEPTH_TEST);
     //
     //  Load shaders and initialize attribute buffers
     //
     program = initShaders(gl, "vertex-shader", "fragment-shader");
-
     gl.useProgram(program);
 
     instanceMatrix = mat4();
+    cube();
 
     projectionMatrix = ortho(-10.0, 10.0, -10.0, 10.0, -10.0, 10.0);
     modelViewMatrix = mat4();
 
 
-    gl.uniformMatrix4fv(gl.getUniformLocation(program, "modelViewMatrix"), false, flatten(modelViewMatrix));
-    gl.uniformMatrix4fv(gl.getUniformLocation(program, "projectionMatrix"), false, flatten(projectionMatrix));
 
-    modelViewMatrixLoc = gl.getUniformLocation(program, "modelViewMatrix")
 
-    cube();
 
-    vBuffer = gl.createBuffer();
+    var nBuffer = gl.createBuffer();
+    gl.bindBuffer( gl.ARRAY_BUFFER, nBuffer );
+    gl.bufferData( gl.ARRAY_BUFFER, flatten(normalsArray), gl.STATIC_DRAW );
 
-    gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, flatten(pointsArray), gl.STATIC_DRAW);
+    var vNormal = gl.getAttribLocation( program, "vNormal" );
+    gl.vertexAttribPointer( vNormal, 3, gl.FLOAT, false, 0, 0 );
+    gl.enableVertexAttribArray( vNormal );
 
+    var vBuffer = gl.createBuffer();
+    gl.bindBuffer( gl.ARRAY_BUFFER, vBuffer );
+    gl.bufferData( gl.ARRAY_BUFFER, flatten(pointsArray), gl.STATIC_DRAW );
+    
     var vPosition = gl.getAttribLocation(program, "vPosition");
     gl.vertexAttribPointer(vPosition, 4, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(vPosition);
 
-    // SLIDER EVENT LISTENERS
-    document.getElementById("torso_angle_slider").onchange = function () {
-        theta[torso_id] = event.srcElement.value;
-        initNodes(torso_id);
-    };
-    document.getElementById("head1_angle_slider").onchange = function () {
-        theta[head_id ] = event.srcElement.value;
-        initNodes(head_id );
-    };
-
-    document.getElementById("anthena1_angle_slider").onchange = function () {
-        theta[anthena1_id ] = event.srcElement.value;
-        initNodes(anthena1_id );
-    };
-    document.getElementById("anthena2_angle_slider").onchange = function () {
-        theta[anthena2_id ] = event.srcElement.value;
-        initNodes(anthena2_id );
-    };
-    document.getElementById("upperlegR_angle_slider").onchange = function () {
-        theta[upperlegR_id ] = event.srcElement.value;
-        initNodes(upperlegR_id );
-    };
-    document.getElementById("upperlegL_angle_slider").onchange = function () {
-        theta[upperlegL_id ] = event.srcElement.value;
-        initNodes(upperlegL_id );
-    };
-    
-    document.getElementById("midlegL_angle_slider").onchange = function () {
-        theta[midlegL_id ] = event.srcElement.value;
-        initNodes(midlegL_id );
-    };
-
-    document.getElementById("midlegR_angle_slider").onchange = function () {
-        theta[midlegR_id ] = event.srcElement.value;
-        initNodes(midlegR_id );
-    };
-    
-    document.getElementById("backlegL_angle_slider").onchange = function () {
-        theta[backlegL_id ] = event.srcElement.value;
-        initNodes(backlegL_id );
-    };
-    
-    document.getElementById("backlegR_angle_slider").onchange = function () {
-        theta[backlegR_id ] = event.srcElement.value;
-        initNodes(backlegR_id );
-    };
-    
-    document.getElementById("upperlegL1_angle_slider").onchange = function () {
-        theta[upperlegL1_id ] = event.srcElement.value;
-        initNodes(upperlegL1_id );
-    };
-    
-    document.getElementById("upperlegR1_angle_slider").onchange = function () {
-        theta[upperlegR1_id ] = event.srcElement.value;
-        initNodes(upperlegR1_id );
-    };
-    
-    document.getElementById("midlegL1_angle_slider").onchange = function () {
-        theta[midlegL1_id ] = event.srcElement.value;
-        initNodes(midlegL1_id );
-    };
-    document.getElementById("midlegR1_angle_slider").onchange = function () {
-        theta[midlegR1_id ] = event.srcElement.value;
-        initNodes(midlegR1_id );
-    };
-    document.getElementById("backlegL1_angle_slider").onchange = function () {
-        theta[backlegL1_id ] = event.srcElement.value;
-        initNodes(backlegL1_id );
-    };
-    document.getElementById("backlegR1_angle_slider").onchange = function () {
-        theta[backlegR1_id ] = event.srcElement.value;
-        initNodes(backlegR1_id );
-    };
-    document.getElementById("upperlegL2_angle_slider").onchange = function () {
-        theta[upperlegL2_id ] = event.srcElement.value;
-        initNodes(upperlegL2_id );
-    };
-    document.getElementById("upperlegR2_angle_slider").onchange = function () {
-        theta[upperlegR2_id ] = event.srcElement.value;
-        initNodes(upperlegR2_id );
-    };
-    document.getElementById("midlegL2_angle_slider").onchange = function () {
-        theta[midlegL2_id ] = event.srcElement.value;
-        initNodes(midlegL2_id );
-    };
-    document.getElementById("midlegR2_angle_slider").onchange = function () {
-        theta[midlegR2_id ] = event.srcElement.value;
-        initNodes(midlegR2_id );
-    };
-    document.getElementById("backlegL2_angle_slider").onchange = function () {
-        theta[backlegL2_id ] = event.srcElement.value;
-        initNodes(backlegL2_id );
-    };
-    document.getElementById("backlegR2_angle_slider").onchange = function () {
-        theta[backlegR2_id ] = event.srcElement.value;
-        initNodes(backlegR2_id );
-    };
+    InitializeEventListeners();
     
     /*
     document.getElementById("lightsaber_angle_slider").onchange = function () {
@@ -525,6 +459,28 @@ window.onload = function init() {
 
     for (i = 0; i < numNodes; i++) initNodes(i);
 
+    ambientProduct = mult(lightAmbient, materialAmbient);
+    diffuseProduct = mult(lightDiffuse, materialDiffuse);
+    specularProduct = mult(lightSpecular, materialSpecular);
+
+    gl.uniform4fv(gl.getUniformLocation(program, "ambientProduct"),
+    flatten(ambientProduct));
+ gl.uniform4fv(gl.getUniformLocation(program, "diffuseProduct"),
+    flatten(diffuseProduct) );
+ gl.uniform4fv(gl.getUniformLocation(program, "specularProduct"), 
+    flatten(specularProduct) );	
+ gl.uniform4fv(gl.getUniformLocation(program, "lightPosition"), 
+    flatten(lightPosition) );
+    
+ gl.uniform1f(gl.getUniformLocation(program, 
+    "shininess"),materialShininess);
+ 
+
+    gl.uniformMatrix4fv(gl.getUniformLocation(program, "modelViewMatrix"), false, flatten(modelViewMatrix));
+    gl.uniformMatrix4fv(gl.getUniformLocation(program, "projectionMatrix"), false, flatten(projectionMatrix));
+
+    modelViewMatrixLoc = gl.getUniformLocation(program, "modelViewMatrix")
+
     render();
 
 }
@@ -534,6 +490,112 @@ var render = function () {
 
     gl.clear(gl.COLOR_BUFFER_BIT);
     traverse(torso_id);
+                
+    modelView = mat4(); 
+    gl.uniformMatrix4fv( gl.getUniformLocation(program,
+            "modelViewMatrix"), false, flatten(modelView) );
+
+    gl.drawArrays( gl.TRIANGLES, 0, numVertices );
+            
     requestAnimFrame(render);
 }
 
+var InitializeEventListeners = function(){
+        // SLIDER EVENT LISTENERS
+        document.getElementById("torso_angle_slider").onchange = function () {
+            theta[torso_id] = event.srcElement.value;
+            initNodes(torso_id);
+        };
+        document.getElementById("head1_angle_slider").onchange = function () {
+            theta[head_id ] = event.srcElement.value;
+            initNodes(head_id );
+        };
+    
+        document.getElementById("anthena1_angle_slider").onchange = function () {
+            theta[anthena1_id ] = event.srcElement.value;
+            initNodes(anthena1_id );
+        };
+        document.getElementById("anthena2_angle_slider").onchange = function () {
+            theta[anthena2_id ] = event.srcElement.value;
+            initNodes(anthena2_id );
+        };
+        document.getElementById("upperlegR_angle_slider").onchange = function () {
+            theta[upperlegR_id ] = event.srcElement.value;
+            initNodes(upperlegR_id );
+        };
+        document.getElementById("upperlegL_angle_slider").onchange = function () {
+            theta[upperlegL_id ] = event.srcElement.value;
+            initNodes(upperlegL_id );
+        };
+        
+        document.getElementById("midlegL_angle_slider").onchange = function () {
+            theta[midlegL_id ] = event.srcElement.value;
+            initNodes(midlegL_id );
+        };
+    
+        document.getElementById("midlegR_angle_slider").onchange = function () {
+            theta[midlegR_id ] = event.srcElement.value;
+            initNodes(midlegR_id );
+        };
+        
+        document.getElementById("backlegL_angle_slider").onchange = function () {
+            theta[backlegL_id ] = event.srcElement.value;
+            initNodes(backlegL_id );
+        };
+        
+        document.getElementById("backlegR_angle_slider").onchange = function () {
+            theta[backlegR_id ] = event.srcElement.value;
+            initNodes(backlegR_id );
+        };
+        
+        document.getElementById("upperlegL1_angle_slider").onchange = function () {
+            theta[upperlegL1_id ] = event.srcElement.value;
+            initNodes(upperlegL1_id );
+        };
+        
+        document.getElementById("upperlegR1_angle_slider").onchange = function () {
+            theta[upperlegR1_id ] = event.srcElement.value;
+            initNodes(upperlegR1_id );
+        };
+        
+        document.getElementById("midlegL1_angle_slider").onchange = function () {
+            theta[midlegL1_id ] = event.srcElement.value;
+            initNodes(midlegL1_id );
+        };
+        document.getElementById("midlegR1_angle_slider").onchange = function () {
+            theta[midlegR1_id ] = event.srcElement.value;
+            initNodes(midlegR1_id );
+        };
+        document.getElementById("backlegL1_angle_slider").onchange = function () {
+            theta[backlegL1_id ] = event.srcElement.value;
+            initNodes(backlegL1_id );
+        };
+        document.getElementById("backlegR1_angle_slider").onchange = function () {
+            theta[backlegR1_id ] = event.srcElement.value;
+            initNodes(backlegR1_id );
+        };
+        document.getElementById("upperlegL2_angle_slider").onchange = function () {
+            theta[upperlegL2_id ] = event.srcElement.value;
+            initNodes(upperlegL2_id );
+        };
+        document.getElementById("upperlegR2_angle_slider").onchange = function () {
+            theta[upperlegR2_id ] = event.srcElement.value;
+            initNodes(upperlegR2_id );
+        };
+        document.getElementById("midlegL2_angle_slider").onchange = function () {
+            theta[midlegL2_id ] = event.srcElement.value;
+            initNodes(midlegL2_id );
+        };
+        document.getElementById("midlegR2_angle_slider").onchange = function () {
+            theta[midlegR2_id ] = event.srcElement.value;
+            initNodes(midlegR2_id );
+        };
+        document.getElementById("backlegL2_angle_slider").onchange = function () {
+            theta[backlegL2_id ] = event.srcElement.value;
+            initNodes(backlegL2_id );
+        };
+        document.getElementById("backlegR2_angle_slider").onchange = function () {
+            theta[backlegR2_id ] = event.srcElement.value;
+            initNodes(backlegR2_id );
+        };
+}
