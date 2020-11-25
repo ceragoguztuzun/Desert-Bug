@@ -434,120 +434,120 @@ window.onload = function init() {
     gl.enableVertexAttribArray(vPosition);
 
     // SLIDER EVENT LISTENERS
-    document.getElementById("torso_angle_slider").onchange = function () {
+    document.getElementById("torso_angle_slider").oninput = function () {
         theta[torso_id] = event.srcElement.value;
         initNodes(torso_id);
         console.log("torso theta: ", theta[torso_id]);
     };
-    document.getElementById("head1_angle_slider").onchange = function () {
+    document.getElementById("head1_angle_slider").oninput = function () {
         theta[head_id] = event.srcElement.value;
         initNodes(head_id);
         console.log("head theta: ", theta[head_id]);
     };
 
-    document.getElementById("anthena1_angle_slider").onchange = function () {
+    document.getElementById("anthena1_angle_slider").oninput = function () {
         theta[anthena1_id] = event.srcElement.value;
         initNodes(anthena1_id);
         console.log("anthena1 theta: ", theta[anthena1_id]);
     };
-    document.getElementById("anthena2_angle_slider").onchange = function () {
+    document.getElementById("anthena2_angle_slider").oninput = function () {
         theta[anthena2_id] = event.srcElement.value;
         initNodes(anthena2_id);
         console.log("anthena2 theta: ", theta[anthena2_id]);
     };
-    document.getElementById("upperlegR_angle_slider").onchange = function () {
+    document.getElementById("upperlegR_angle_slider").oninput = function () {
         theta[upperlegR_id] = event.srcElement.value;
         initNodes(upperlegR_id);
         console.log("upperlegR theta: ", theta[upperlegR_id]);
     };
-    document.getElementById("upperlegL_angle_slider").onchange = function () {
+    document.getElementById("upperlegL_angle_slider").oninput = function () {
         theta[upperlegL_id] = event.srcElement.value;
         initNodes(upperlegL_id);
         console.log("upperlegL theta: ", theta[upperlegL_id]);
     };
 
-    document.getElementById("midlegL_angle_slider").onchange = function () {
+    document.getElementById("midlegL_angle_slider").oninput = function () {
         theta[midlegL_id] = event.srcElement.value;
         initNodes(midlegL_id);
         console.log("midlegL theta: ", theta[midlegL_id]);
     };
 
-    document.getElementById("midlegR_angle_slider").onchange = function () {
+    document.getElementById("midlegR_angle_slider").oninput = function () {
         theta[midlegR_id] = event.srcElement.value;
         initNodes(midlegR_id);
         console.log("midlegR theta: ", theta[midlegR_id]);
     };
 
-    document.getElementById("backlegL_angle_slider").onchange = function () {
+    document.getElementById("backlegL_angle_slider").oninput = function () {
         theta[backlegL_id] = event.srcElement.value;
         initNodes(backlegL_id);
         console.log("backlegL theta: ", theta[backlegL_id]);
     };
 
-    document.getElementById("backlegR_angle_slider").onchange = function () {
+    document.getElementById("backlegR_angle_slider").oninput = function () {
         theta[backlegR_id] = event.srcElement.value;
         initNodes(backlegR_id);
         console.log("backlegR theta: ", theta[backlegR_id]);
     };
 
-    document.getElementById("upperlegL1_angle_slider").onchange = function () {
+    document.getElementById("upperlegL1_angle_slider").oninput = function () {
         theta[upperlegL1_id] = event.srcElement.value;
         initNodes(upperlegL1_id);
         console.log("upperlegL1 theta: ", theta[upperlegL1_id]);
     };
 
-    document.getElementById("upperlegR1_angle_slider").onchange = function () {
+    document.getElementById("upperlegR1_angle_slider").oninput = function () {
         theta[upperlegR1_id] = event.srcElement.value;
         initNodes(upperlegR1_id);
         console.log("upperlegR1 theta: ", theta[upperlegR1_id]);
     };
 
-    document.getElementById("midlegL1_angle_slider").onchange = function () {
+    document.getElementById("midlegL1_angle_slider").oninput = function () {
         theta[midlegL1_id] = event.srcElement.value;
         initNodes(midlegL1_id);
         console.log("midlegL1 theta: ", theta[midlegL1_id]);
     };
-    document.getElementById("midlegR1_angle_slider").onchange = function () {
+    document.getElementById("midlegR1_angle_slider").oninput = function () {
         theta[midlegR1_id] = event.srcElement.value;
         initNodes(midlegR1_id);
         console.log("midlegR1 theta: ", theta[midlegR1_id]);
     };
-    document.getElementById("backlegL1_angle_slider").onchange = function () {
+    document.getElementById("backlegL1_angle_slider").oninput = function () {
         theta[backlegL1_id] = event.srcElement.value;
         initNodes(backlegL1_id);
         console.log("backlegL1 theta: ", theta[backlegL1_id]);
     };
-    document.getElementById("backlegR1_angle_slider").onchange = function () {
+    document.getElementById("backlegR1_angle_slider").oninput = function () {
         theta[backlegR1_id] = event.srcElement.value;
         initNodes(backlegR1_id);
         console.log("backlegR1 theta: ", theta[backlegR1_id]);
     };
-    document.getElementById("upperlegL2_angle_slider").onchange = function () {
+    document.getElementById("upperlegL2_angle_slider").oninput = function () {
         theta[upperlegL2_id] = event.srcElement.value;
         initNodes(upperlegL2_id);
         console.log("upperlegL2 theta: ", theta[upperlegL2_id]);
     };
-    document.getElementById("upperlegR2_angle_slider").onchange = function () {
+    document.getElementById("upperlegR2_angle_slider").oninput = function () {
         theta[upperlegR2_id] = event.srcElement.value;
         initNodes(upperlegR2_id);
         console.log("upperlegR2 theta: ", theta[upperlegR2_id]);
     };
-    document.getElementById("midlegL2_angle_slider").onchange = function () {
+    document.getElementById("midlegL2_angle_slider").oninput = function () {
         theta[midlegL2_id] = event.srcElement.value;
         initNodes(midlegL2_id);
         console.log("midlegL2 theta: ", theta[midlegL2_id]);
     };
-    document.getElementById("midlegR2_angle_slider").onchange = function () {
+    document.getElementById("midlegR2_angle_slider").oninput = function () {
         theta[midlegR2_id] = event.srcElement.value;
         initNodes(midlegR2_id);
         console.log("midlegR2 theta: ", theta[midlegR2_id]);
     };
-    document.getElementById("backlegL2_angle_slider").onchange = function () {
+    document.getElementById("backlegL2_angle_slider").oninput = function () {
         theta[backlegL2_id] = event.srcElement.value;
         initNodes(backlegL2_id);
         console.log("backlegL2 theta: ", theta[backlegL2_id]);
     };
-    document.getElementById("backlegR2_angle_slider").onchange = function () {
+    document.getElementById("backlegR2_angle_slider").oninput = function () {
         theta[backlegR2_id] = event.srcElement.value;
         initNodes(backlegR2_id);
         console.log("backlegR2 theta: ", theta[backlegR2_id]);
