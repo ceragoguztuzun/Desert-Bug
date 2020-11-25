@@ -70,17 +70,24 @@ var anthena_height = 3.5;
 var lightsaber_width = 1.0;
 var lightsaber_height = 4.0;
 //
-
 var numNodes = 23;
 var numAngles = 24;
 var angle = 0;
 var coords_x = 0;
 var coords_y = 0;
 var coords_z = 0;
+//
+var jumpFlag = false;
+var animFlag = false;
+var interpolation_fr = 0;
+var time;
+var jump_theta = [];
+var jump_coords = [];
+var anim_theta = [];
+var anim_coords = [];
 
 //angles for each node
 var theta = [180, 0, 30, -30, -60, 30, 15, 60, -30, -15, -60, 30, 15, 60, -30, -15, -60, 30, 15, 60, -30, -15, 0];
-var theta_original = [180, 0, 30, -30, -60, 30, 15, 60, -30, -15, -60, 30, 15, 60, -30, -15, -60, 30, 15, 60, -30, -15, 0];
 
 var numVertices = 24;
 
@@ -386,11 +393,6 @@ function cube() {
     quad(5, 4, 0, 1);
 }
 
-var jumpFlag = false;
-var interpolation_fr = 0;
-var time;
-var jump_theta = [];
-var jump_coords = [];
 window.onload = function init() {
     canvas = document.getElementById("gl-canvas");
 
@@ -552,42 +554,70 @@ window.onload = function init() {
     };
     document.getElementById("jump_button").onclick = function () {
         jumpFlag = true;
+        animFlag = false;
         time = 0;
         interpolation_fr = 0;
 
         // init theta lists for each pose in jumping 
-        jump_theta = [
+        jump_theta.push(
             //T,    H, A1, A2, UR, UR1, UR2, UL, UL1, UL2, MR, MR1, MR2, ML, ML1, ML2, BR, BR1, BR2, BL, BL1, BL2, L
             [-150, 0, 30, -30, -60, 30, 15, 60, -30, -15, -60, 30, 15, 60, -30, -15, -60, 30, 15, 60, -30, -15, 0],
             [-150, 0, 15, -15, -90, 60, -45, 90, -60, 45, -90, 60, -45, 90, -60, 45, -90, 60, -45, 90, -60, 45, 0],
             [-160, 0, 12, -12, -60, 60, -45, 60, -60, 45, -50, 60, -45, 50, -60, 45, -35, 60, -45, 35, -60, 45, 0],
-            [-170, -75, 3, -9, -20, 60, 20, 20, -60, -25, -25, 60, 20, 25, -60, -25, -20, 60, 20, 20, -60, -25, 0]
-        ]
+            [-170, -75, 3, -9, -20, 60, 20, 20, -60, -25, -25, 60, 20, 25, -60, -25, -20, 60, 20, 20, -60, -25, 0],
+            [-160, 0, 12, -12, -60, 60, -45, 60, -60, 45, -50, 60, -45, 50, -60, 45, -35, 60, -45, 35, -60, 45, 0],
+            [-150, 0, 15, -15, -90, 60, -45, 90, -60, 45, -90, 60, -45, 90, -60, 45, -90, 60, -45, 90, -60, 45, 0],
+            [-150, 0, 30, -30, -60, 30, 15, 60, -30, -15, -60, 30, 15, 60, -30, -15, -60, 30, 15, 60, -30, -15, 0],
+        );
 
-        jump_coords = [
+        jump_coords.push(
             // x, y, z
             [0, 0, 0],
-            [0, -0.7, 0],
+            [0, -0.8, 0],
             [0, 2, -1],
-            [0, 5, -2]
-        ]
+            [0, 5, -2],
+            [0, 2, -1],
+            [0, -0.8, 0],
+            [0, 0, 0]
+        );
     };
     document.getElementById("stop_button").onclick = function () {
+        if( animFlag) {
+            animFlag = false;
+        }
         if( jumpFlag) {
             jumpFlag = false;
-            theta = theta_original;
-            coords_x = 0;
-            coords_y = 0;
-            coords_z = 0;
         }
     };
-
-    /*
-    document.getElementById("lightsaber_angle_slider").onchange = function () {
-        theta[lightsaber_id ] = event.srcElement.value;
-        initNodes(lightsaber_id );
+    document.getElementById("shapeRevert_button").onclick = function () {
+        if( animFlag) {
+            animFlag = false;
+        }
+        if( jumpFlag) {
+            jumpFlag = false;
+        }
+        theta = [180, 0, 30, -30, -60, 30, 15, 60, -30, -15, -60, 30, 15, 60, -30, -15, -60, 30, 15, 60, -30, -15, 0];
+        coords_x = 0;
+        coords_y = 0;
+        coords_z = 0;
+        for (i = 0; i < numNodes; i++) initNodes(i);
     };
-    */
+    document.getElementById("play_button").onclick = function () {
+        animFlag = true;
+        jumpFlag = false;
+        time = 0;
+        interpolation_fr = 0;
+    };
+    document.getElementById("addKeyFrame_button").onclick = function () {
+        if( !jumpFlag && !animFlag)
+        {    
+            anim_coords.push( [coords_x, coords_y, coords_z]);
+            anim_theta.push( theta.slice());
+            for (i = 0; i < numNodes; i++) initNodes(i);
+            alert("Keyframe is Added! Add more keyframes, or play your animation through the PLAY button!");
+        }
+        else alert("Stop the animation through STOP button to add keyframe.");
+    };
 
     for (i = 0; i < numNodes; i++) initNodes(i);
 
@@ -602,40 +632,52 @@ var render = function () {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     // TRIVIAL RENDER
-    if (!jumpFlag) 
+    if (!jumpFlag && !animFlag) 
     {
         traverse(torso_id);
     }
-    // JUMP ANIMATION RENDER
+    // JUMP/ANIMATION RENDER
     else 
     {
-        var anim_theta_len = jump_theta.length;
+        var anim_theta_len;
+        if( jumpFlag) anim_theta_len = jump_theta.length;
+        if( animFlag) anim_theta_len = anim_theta.length;
         var len = theta.length;
-
-        var nextFrame = (interpolation_fr + 1) % anim_theta_len;
+        console.log(anim_theta.length);
 
         if (time < 1) 
         {
-            time += 0.05;
+            if( jumpFlag) time += 0.05;
+            if( animFlag) time += 0.01;
         }
         else 
         {
-            interpolation_fr = nextFrame; // loop
+            interpolation_fr = (interpolation_fr + 1) % anim_theta_len; // loop
             time = 0;
         }
-
-        var curFrame = interpolation_fr;
+        
+        var next_fr = (interpolation_fr + 1) % anim_theta_len;
 
         // translate torso
-        coords_x = (1 - time)*jump_coords[curFrame][0] + time*jump_coords[nextFrame][0];
-        coords_y = (1 - time)*jump_coords[curFrame][1] + time*jump_coords[nextFrame][1];
-        coords_z = (1 - time)*jump_coords[curFrame][2] + time*jump_coords[nextFrame][2];
+        if( jumpFlag)
+        {
+            coords_x = (1 - time)*jump_coords[interpolation_fr][0] + time*jump_coords[next_fr][0];
+            coords_y = (1 - time)*jump_coords[interpolation_fr][1] + time*jump_coords[next_fr][1];
+            coords_z = (1 - time)*jump_coords[interpolation_fr][2] + time*jump_coords[next_fr][2];
+        }
+        if( animFlag)
+        {
+            coords_x = (1 - time)*anim_coords[interpolation_fr][0] + time*anim_coords[next_fr][0];
+            coords_y = (1 - time)*anim_coords[interpolation_fr][1] + time*anim_coords[next_fr][1];
+            coords_z = (1 - time)*anim_coords[interpolation_fr][2] + time*anim_coords[next_fr][2];
+        }
         initNodes(torso_id);
 
         // change each angle in theta array
         for (var i = 0; i < len; i++) 
         {
-            theta[i] = (1 - time)*jump_theta[curFrame][i] + time*jump_theta[nextFrame][i];
+            if( jumpFlag) theta[i] = (1 - time)*jump_theta[interpolation_fr][i] + time*jump_theta[next_fr][i];
+            if( animFlag) theta[i] = (1 - time)*anim_theta[interpolation_fr][i] + time*anim_theta[next_fr][i];
             initNodes(i);
         }
         
