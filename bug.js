@@ -73,14 +73,15 @@ var lightsaber_height = 4.0;
 var numNodes = 23;
 var numAngles = 24;
 var angle = 0;
-var coords_x = 0;
-var coords_y = 0;
-var coords_z = 0;
+var coords_x;
+var coords_y;
+var coords_z;
+var coords = [coords_x, coords_y, coords_z];
 //
 var jumpFlag = false;
 var animFlag = false;
-var interpolation_fr = 0;
-var time;
+var interpolation_fr_index = 0;
+var t;
 var jump_theta = [];
 var jump_coords = [];
 var anim_theta = [];
@@ -134,7 +135,7 @@ function initNodes(id) {
 
         case torso_id:
             // configure m
-            m = translate( coords_x, coords_y, coords_z);
+            m = translate( coords);
     
             //m = rotate(theta[torso_id], 0, 1, 0);
             m = mult(m, rotate(theta[torso_id], 0, 1, 0))
@@ -182,7 +183,7 @@ function initNodes(id) {
             break;
         case upperlegR2_id:
             // configure m
-            m = translate(torso_height * (0.025), arm_height - 1.1, (torso_width * -0.025));
+            m = translate(torso_height * (0.025), arm_height - 1.1, (torso_width * -0.002));
             m = mult(m, rotate(theta[upperlegR2_id], 1, 0, 0));
             // form node
             figure[upperlegR2_id] = createNode(m, legs2, null, lightsaber_id);
@@ -204,7 +205,7 @@ function initNodes(id) {
             break;
         case upperlegL2_id:
             // configure m
-            m = translate(torso_height * (0.025), arm_height - 1.1, (torso_width * -0.025));
+            m = translate(torso_height * (0.025), arm_height - 1.1, (torso_width * -0.002));
             m = mult(m, rotate(theta[upperlegL2_id], 1, 0, 0));
             // form node
             figure[upperlegL2_id] = createNode(m, legs2, null, null);
@@ -226,7 +227,7 @@ function initNodes(id) {
             break;
         case midlegR2_id:
             // configure m
-            m = translate(-0.5 * torso_height * (0.025), arm_height - 1.1, (torso_width * -0.025));
+            m = translate(-0.5 * torso_height * (0.025), arm_height - 1.1, (torso_width * -0.002));
             m = mult(m, rotate(theta[midlegR2_id], 1, 0, 0));
             // form node
             figure[midlegR2_id] = createNode(m, legs2, null, null);
@@ -248,7 +249,7 @@ function initNodes(id) {
             break;
         case midlegL2_id:
             // configure m
-            m = translate(-0.5 * torso_height * (0.025), arm_height - 1.1, (torso_width * -0.025));
+            m = translate(-0.5 * torso_height * (0.025), arm_height - 1.1, (torso_width * -0.002));
             m = mult(m, rotate(theta[midlegL2_id], 1, 0, 0));
             // form node
             figure[midlegL2_id] = createNode(m, legs2, null, null);
@@ -270,7 +271,7 @@ function initNodes(id) {
             break;
         case backlegR2_id:
             // configure m
-            m = translate(-2 * torso_height * (0.025), arm_height - 1.1, (torso_width * -0.025));
+            m = translate(-2 * torso_height * (0.025), arm_height - 1.1, (torso_width * -0.002));
             m = mult(m, rotate(theta[backlegR2_id], 1, 0, 0));
             // form node
             figure[backlegR2_id] = createNode(m, legs2, null, null);
@@ -292,7 +293,7 @@ function initNodes(id) {
             break;
         case backlegL2_id:
             // configure m
-            m = translate(-2 * torso_height * (0.025), arm_height - 1.1, (torso_width * -0.025));
+            m = translate(-2 * torso_height * (0.025), arm_height - 1.1, (torso_width * -0.002));
             m = mult(m, rotate(theta[backlegL2_id], 1, 0, 0));
             // form node
             figure[backlegL2_id] = createNode(m, legs2, null, null);
@@ -399,6 +400,14 @@ window.onload = function init() {
     gl = WebGLUtils.setupWebGL(canvas);
     if (!gl) { alert("WebGL isn't available"); }
 
+    
+	var saveButton = document.getElementById("save_button");
+    var input = document.getElementById('txt_input');
+    anim_coords.push( coords);
+    anim_theta.push( theta.slice());
+
+    for(var i = 0; i < 3; i++) coords[i] = 0; 
+
     gl.viewport(0, 0, canvas.width, canvas.height);
     gl.clearColor(0.8, 0.8, 0.8, 1.0);
 
@@ -411,7 +420,7 @@ window.onload = function init() {
 
     instanceMatrix = mat4();
 
-    time = 0;
+    t = 0;
 
     //projectionMatrix = ortho(-10.0, 10.0, -10.0, 10.0, -10.0, 10.0);
     projectionMatrix = perspective(120.0, 1.0, 0.0001, 10);
@@ -552,11 +561,13 @@ window.onload = function init() {
         initNodes(backlegR2_id);
         console.log("backlegR2 theta: ", theta[backlegR2_id]);
     };
+
+    // BUTTON EVENT LISTENERS
     document.getElementById("jump_button").onclick = function () {
         jumpFlag = true;
         animFlag = false;
-        time = 0;
-        interpolation_fr = 0;
+        t = 0;
+        interpolation_fr_index = 0;
 
         // init theta lists for each pose in jumping 
         jump_theta.push(
@@ -597,34 +608,116 @@ window.onload = function init() {
             jumpFlag = false;
         }
         theta = [180, 0, 30, -30, -60, 30, 15, 60, -30, -15, -60, 30, 15, 60, -30, -15, -60, 30, 15, 60, -30, -15, 0];
-        coords_x = 0;
-        coords_y = 0;
-        coords_z = 0;
+        for(var i = 0; i < 3; i++) coords[i] = 0;
         for (i = 0; i < numNodes; i++) initNodes(i);
     };
     document.getElementById("play_button").onclick = function () {
         animFlag = true;
         jumpFlag = false;
-        time = 0;
-        interpolation_fr = 0;
+        t = 0;
+        interpolation_fr_index = 0;
     };
     document.getElementById("addKeyFrame_button").onclick = function () {
         if( !jumpFlag && !animFlag)
         {    
-            anim_coords.push( [coords_x, coords_y, coords_z]);
+            anim_coords.push( coords);
             anim_theta.push( theta.slice());
             for (i = 0; i < numNodes; i++) initNodes(i);
             alert("Keyframe is Added! Add more keyframes, or play your animation through the PLAY button!");
         }
         else alert("Stop the animation through STOP button to add keyframe.");
     };
+    // save animation by generating a txt file.
+	// used https://github.com/eligrey/FileSaver.js library for the implementation of save functionality.
+	// I used the saveAs function to save the data in created Blob to a txt file.
+	saveButton.addEventListener("click", function(){
+		// variables to save: 
+		var dataToWrite = writeToTxt();
+		var blob = new Blob(dataToWrite);
+		saveAs(blob, "bug_animation.txt");
+    });
+    // load inputted txt file
+	input.addEventListener("change", function(){
+		let files = input.files;
+	
+		if(files.length == 0) return;
+	
+		const file = files[0];
+	
+		let reader = new FileReader();
+		var lines;
+
+		reader.onload = (e) => {
+			var file = e.target.result;
+			// parse line by line by splitting the txt input.
+			lines = file.split(/\r\n|\n/);
+
+            jumpFlag = false;
+            var line_index = 0;
+            animFlag = (lines[line_index] == 'true');
+
+            if( animFlag)
+            {
+                line_index++;
+                var anim_tlen = parseInt(lines[line_index]);
+                line_index++;
+                for(var i = 0; i < anim_tlen; i++)
+                {
+                    var arr = [];
+                    for( var j = 0; j < numNodes; j++)
+                    {
+                        arr.push(parseInt(lines[line_index]));
+                        line_index++;
+                    }
+                    anim_theta.push(arr);
+                }
+                for(var i = 0; i < anim_tlen; i++)
+                {
+                    var arr = [];
+                    for( var j = 0; j < 3; j++)
+                    {
+                        arr.push(parseInt(lines[line_index]));
+                        line_index++;
+                    }
+                    anim_coords.push(arr);
+                }
+            }
+		};
+		reader.readAsText(file); 
+	});
+
 
     for (i = 0; i < numNodes; i++) initNodes(i);
 
     render();
-
 }
 
+// Method to create a txt file of the created animation to be saved
+function writeToTxt() {
+	var dataToWrite = [];
+    dataToWrite.push(animFlag, "\n");
+    //dataToWrite.push(theta.length, "\n");
+
+    if(animFlag)
+    {
+        dataToWrite.push(anim_theta.length, "\n");
+        for (var i = 0; i < anim_theta.length; i++) 
+        {
+            for( var j = 0; j < numNodes; j++)
+            {
+                dataToWrite.push(anim_theta[i][j], "\n");
+            }
+        }
+        for (var i = 0; i < anim_coords.length; i++) 
+        {
+            for( var j = 0; j < 3; j++)
+            {
+                dataToWrite.push(anim_coords[i][j], "\n");
+            }
+        }
+    }
+	return dataToWrite;
+}
 
 var render = function () {
 
@@ -643,44 +736,38 @@ var render = function () {
         if( jumpFlag) anim_theta_len = jump_theta.length;
         if( animFlag) anim_theta_len = anim_theta.length;
         var len = theta.length;
-        console.log(anim_theta.length);
 
-        if (time < 1) 
+        // change keyframe when t = 1
+        if (t < 1) 
         {
-            if( jumpFlag) time += 0.05;
-            if( animFlag) time += 0.01;
+            if( jumpFlag) t = t + 0.05;
+            if( animFlag) t = t + 0.01;
         }
         else 
         {
-            interpolation_fr = (interpolation_fr + 1) % anim_theta_len; // loop
-            time = 0;
+            t = 0;
+            interpolation_fr_index = (interpolation_fr_index + 1) % anim_theta_len; // loop
         }
         
-        var next_fr = (interpolation_fr + 1) % anim_theta_len;
+        var next_fr_index = (interpolation_fr_index + 1) % anim_theta_len;
 
-        // translate torso
+        // translate by changing coords
         if( jumpFlag)
         {
-            coords_x = (1 - time)*jump_coords[interpolation_fr][0] + time*jump_coords[next_fr][0];
-            coords_y = (1 - time)*jump_coords[interpolation_fr][1] + time*jump_coords[next_fr][1];
-            coords_z = (1 - time)*jump_coords[interpolation_fr][2] + time*jump_coords[next_fr][2];
+            for( var i = 0; i < 3; i++) coords[i] = (1 - t)*jump_coords[interpolation_fr_index][i] + t*jump_coords[next_fr_index][i];
         }
         if( animFlag)
         {
-            coords_x = (1 - time)*anim_coords[interpolation_fr][0] + time*anim_coords[next_fr][0];
-            coords_y = (1 - time)*anim_coords[interpolation_fr][1] + time*anim_coords[next_fr][1];
-            coords_z = (1 - time)*anim_coords[interpolation_fr][2] + time*anim_coords[next_fr][2];
+            for( var i = 0; i < 3; i++) coords[i] = (1 - t)*anim_coords[interpolation_fr_index][i] + t*anim_coords[next_fr_index][i];
         }
-        initNodes(torso_id);
 
         // change each angle in theta array
         for (var i = 0; i < len; i++) 
         {
-            if( jumpFlag) theta[i] = (1 - time)*jump_theta[interpolation_fr][i] + time*jump_theta[next_fr][i];
-            if( animFlag) theta[i] = (1 - time)*anim_theta[interpolation_fr][i] + time*anim_theta[next_fr][i];
+            if( jumpFlag) theta[i] = (1 - t)*jump_theta[interpolation_fr_index][i] + t*jump_theta[next_fr_index][i];
+            if( animFlag) theta[i] = (1 - t)*anim_theta[interpolation_fr_index][i] + t*anim_theta[next_fr_index][i];
             initNodes(i);
         }
-        
         traverse(torso_id);
     }
     requestAnimFrame(render);

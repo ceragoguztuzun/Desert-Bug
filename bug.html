@@ -26,12 +26,13 @@
     varying float depth;
     void main()
     {
-      float i = depth*0.5;
+      float i = depth*0.45;
       gl_FragColor = vec4(1./ i, 0.5/ i, 0.0, 1.0);
 
     }
   </script>
 
+  <script src="FileSaver.js"></script>
   <script type="text/javascript" src="webgl-utils.js"></script>
   <script type="text/javascript" src="InitShaders.js"></script>
   <script type="text/javascript" src="MV.js"></script>
@@ -417,4 +418,16 @@
   <button id="play_button" type="button">Play Animation</button>  
   <button id="stop_button" type="button">Stop</button>
   <button id="shapeRevert_button" type="button">Revert to Starting Pose</button>
+</div>
+
+<div>
+  <form>
+<p style="font-weight: bold;">Click on the save button to generate a txt file of your work. <br>
+  <button id = "save_button">Save</button>
+
+</form>
+</div>
+<div>
+  <p style="font-weight: bold;">Upload a txt file of a previous animation. <br>
+  <input type="file" id="txt_input">
 </div>
