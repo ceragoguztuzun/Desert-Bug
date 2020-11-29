@@ -1,11 +1,13 @@
 #main_wrapper{
     display: flex;
 }
+
 #parameter_wrapper{
-    width: 500px;
+    width: 450px;
 }
+
 #canvas_wrapper{
-    flex-grow: 1;
+    width: 500px;
 }
 
 #main_wrapper .selector_wrapper{
@@ -18,4 +20,19 @@
 #main_wrapper .input_wrapper{
     display: flex;
     align-items: center;
+}
+
+#main_wrapper .checkbox_wrapper{
+    display: flex;
+    justify-content:space-around;
+    margin: 0.3rem 2rem 0 2rem;
+
+}
+#gl-canvas{
+    margin-bottom: 1rem;
+}
+#main_wrapper{
+    background-color: antiquewhite;
+    width: 100vw;
+    height: 100vh;
 }
