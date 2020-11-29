@@ -767,15 +767,15 @@ var render = function () {
         var len = theta.length;
 
         // change keyframe when t = 1
-        if (t < 1) 
-        {
-            if( jumpFlag) t = t + 0.05;
-            if( animFlag) t = t + 0.01;
-        }
-        else 
+        if (t >= 1) 
         {
             t = 0;
             interpolation_fr_index = (interpolation_fr_index + 1) % anim_theta_len; // loop
+        }
+        else 
+        {
+            if( jumpFlag) t = t + 0.05;
+            if( animFlag) t = t + 0.01;
         }
         
         var next_fr_index = (interpolation_fr_index + 1) % anim_theta_len;
